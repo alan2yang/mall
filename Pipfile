@@ -7,6 +7,8 @@ verify_ssl = true
 
 [packages]
 django = "==1.11"
+pymysql = "*"
+djangorestframework = "*"
 
 [requires]
 python_version = "3.6"
