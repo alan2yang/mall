@@ -9,6 +9,7 @@ verify_ssl = true
 django = "==1.11"
 pymysql = "*"
 djangorestframework = "*"
+django-redis = "*"
 
 [requires]
 python_version = "3.6"
