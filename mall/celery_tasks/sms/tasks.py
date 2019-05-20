@@ -3,11 +3,11 @@ import logging
 from celery_tasks.main import celery_app
 from .utils.yuntongxun.sms import CCP
 
-logger=logging.getLogger('django')
+logger=logging.getLogger('django')  # 使用django中的配置
 
 
 @celery_app.task(name='send_sms_code')
-def send_sms_code(mobile, code, expires,temp_id):
+def send_sms_code(mobile, code, expires,template_id):
     """
     发送短信验证码
     :param mobile: 手机号
@@ -18,7 +18,7 @@ def send_sms_code(mobile, code, expires,temp_id):
 
     try:
         ccp = CCP()
-        result = ccp.send_template_sms(mobile, [code, expires], temp_id)
+        result = ccp.send_template_sms(mobile, [code, expires], template_id)
     except Exception as e:
         logger.error("发送验证码短信[异常][ mobile: %s, message: %s ]" % (mobile, e))
     else:
