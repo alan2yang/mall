@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import os,sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 sys.path.insert(0,os.path.join(BASE_DIR,'apps'))
@@ -86,7 +87,7 @@ DATABASES = {
         'HOST': '127.0.0.1',
         'PORT': 3306,
         'USER': 'root',
-        'PASSWORD': 'mysql',
+        'PASSWORD': '74108520',
         'NAME': 'mall',
     }
 }
@@ -205,7 +206,7 @@ REST_FRAMEWORK = {
 
 # CORS
 CORS_ORIGIN_WHITELIST = (
-    '127.0.0.1:8080',
+    'http://127.0.0.1:8080',
 )
 
 CORS_ALLOW_CREDENTIALS = True  # 允许携带cookie

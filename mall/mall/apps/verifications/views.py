@@ -6,18 +6,45 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView
-from mall.libs.captcha.captcha import captcha
 from django_redis import get_redis_connection
 from django.http import HttpResponse
+
+from mall.libs.captcha.captcha import captcha
 
 from users.models import User
 from . import constants
 from . import serializers
 from mall.utils.yuntongxun.sms import CCP
 from celery_tasks.sms.tasks import send_sms_code
+
 # Create your views here.
 
 logger=logging.getLogger('django')
+
+
+# get /usernames/(?P<username>\w{5,20})/count/
+class UsernameCountView(APIView):
+
+    def get(self,request,username):
+        count=User.objects.filter(username=username).count()
+
+        data={
+            'username':username,
+            'count':count
+        }
+        return Response(data)
+
+
+# get /mobiles/(?P<mobile>1[3-9]\d{9})/count
+class MobileCountView(APIView):
+    def get(self, request, mobile):
+        count = User.objects.filter(mobile=mobile).count()
+
+        data = {
+            'mobile': mobile,
+            'count': count
+        }
+        return Response(data)
 
 
 # get /image_codes/(?P<image_code_id>[\w-]+)
@@ -54,6 +81,7 @@ class SMSCodeView(GenericAPIView):
         # redis_conn.setex('sms_{}'.format(mobile),constants.SMS_CODE_REDIS_EXPIRES,sms_code)
         # redis_conn.setex('send_flag_{}'.format(mobile),constants.SEND_SMS_CODE_INTERVAL,1)
 
+        # 减少与数据库的通信次数
         redis_pipe=redis_conn.pipeline()
         redis_pipe.setex('sms_{}'.format(mobile),constants.SMS_CODE_REDIS_EXPIRES,sms_code)
         redis_pipe.setex('send_flag_{}'.format(mobile),constants.SEND_SMS_CODE_INTERVAL,1)
@@ -83,27 +111,4 @@ class SMSCodeView(GenericAPIView):
         return Response({'message':'OK'})
 
 
-# get /usernames/(?P<username>\w{5,20})/count/
-class UsernameCountView(APIView):
-
-    def get(self,request,username):
-        count=User.objects.filter(username=username).count()
-
-        data={
-            'username':username,
-            'count':count
-        }
-        return Response(data)
-
-
-# get /mobiles/(?P<mobile>1[3-9]\d{9})/count
-class MobileCountView(APIView):
-    def get(self, request, mobile):
-        count = User.objects.filter(mobile=mobile).count()
-
-        data = {
-            'mobile': mobile,
-            'count': count
-        }
-        return Response(data)
 

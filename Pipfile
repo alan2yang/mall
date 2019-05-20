@@ -10,6 +10,9 @@ django = "==1.11"
 pymysql = "*"
 djangorestframework = "*"
 django-redis = "*"
+install = "*"
+django-cors-headers = "*"
+pillow = "*"
 
 [requires]
 python_version = "3.6"
